@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html>
+<!--- https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_getfullyear--->
+<head>
+<link rel="apple-touch-icon" sizes="114x114" href="ageApple114.png" />
+<link rel="icon" href="ageApple114.png">
+<style>
+body {
+    font-size: 11pt;
+    font-weight: normal;
+}
+
+h1 {
+	font-size:40pt;
+    font-weight: Normal;
+}
+
+h2 {
+	font-size:11pt;
+    font-weight: bold;
+    display: inline-block;
+}
+
+h3 {
+	font-size:11pt;
+    font-style: italic;
+    font-weight: normal;
+    display: inline-block;
+}
+
+
+</style>
+
+</head>
+<body onload="getAge('2013/02/26', '2015/10/14', '2017/11/10')">
+
+<form action="age.htm">
+  <input type="text" id="newDate" name="newDate">  
+  <input type="submit" value="Submit">
+</form>
+
+
+<!---p>Ages</p--->
+
+
+
+<h1 id="julia_disp"></h1>
+<h1 id="angela_disp"></h1>
+<h1 id="clara_disp"></h1>
+
+
+<!---h2 >8/12/2017 Saturday </h2><br--->
+
+
+<h2 id="date_disp"> </h2>
+<h3 id="all_disp"></h3>
+
+<br><br>
+<input type="text" id="foo" value="text to copy2" />
+<button onclick="copy('foo')">Copy text</button>
+
+
+<script>
+var copy = function(elementId) {
+
+	var input = document.getElementById(elementId);
+	var isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
+
+	if (isiOSDevice) {
+	  
+		var editable = input.contentEditable;
+		var readOnly = input.readOnly;
+
+		input.contentEditable = true;
+		input.readOnly = false;
+
+		var range = document.createRange();
+		range.selectNodeContents(input);
+
+		var selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(range);
+
+		input.setSelectionRange(0, 999999);
+		input.contentEditable = editable;
+		input.readOnly = readOnly;
+
+	} else {
+	 	input.select();
+	}
+
+	document.execCommand('copy');
+}
+
+
+function weeksBetween(d1, d2) {
+    return Math.round((d2 - d1) / (7 * 24 * 60 * 60 * 1000));
+}
+
+
+function getAge(dateStringJ, dateStringA, dateStringC) {
+
+//var newDate= urlParams.get('newDate')
+//console.log(newDate);
+
+
+
+queryString = window.location.search;
+urlParams = new URLSearchParams(queryString);
+newDate = urlParams.get('newDate')
+
+if (newDate == null || newDate == ""){
+   var today = new Date();
+   var today2 = new Date();
+   }
+else{
+   var today = new Date(newDate);
+   var today2 = new Date(newDate);
+   }
+
+//document.getElementsByName('newDate')[0].value = newDate;
+
+
+var friendlyDay = today.getDate();
+var friendlyMonth = today.getMonth()+1;
+var friendlyYear = today.getFullYear();
+var friendlyDate = friendlyMonth + "/" + friendlyDay +"/" + friendlyYear;
+
+document.getElementById('newDate').value=friendlyDate;
+
+ //document.write(today);
+
+    //var today = new Date("2021/05/26");
+    //var today = new Date();
+    //var today2 = new Date();
+	var lastMonthNumber = today.getMonth();
+    var birthDate = new Date(dateStringJ);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    var d = today.getUTCDate();
+	da = today.getDate() - birthDate.getDate();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+        m = (m+12);
+    }
+	if (da < 0 || (da === 0 && today.getDate() < birthDate.getDate())) {
+        //insert function here to add 31,30,28 for previous month.
+		if (lastMonthNumber == 2) {da = (da+28);}
+		else if  (lastMonthNumber == 4 || lastMonthNumber == 6 || lastMonthNumber == 9 || lastMonthNumber == 11  ) {da = (da+30);}
+		else { da = (da+31);}
+    }
+	
+	
+    if (d < birthDate.getUTCDate()) { m--;}
+
+    document.getElementById("julia_disp").innerHTML = 'Julia is ' + age + ' years  ' + m + ' months ' + da + ' days old';
+    var allJ = 'J:'+age+'y'+m+'m';
+    
+    birthDate = new Date(dateStringA);
+    age = today.getFullYear() - birthDate.getFullYear();
+    m = today.getMonth() - birthDate.getMonth();
+	da = today.getDate() - birthDate.getDate();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+        m = (m+12);
+    }
+	if (da < 0 || (da === 0 && today.getDate() < birthDate.getDate())) {
+        //insert function here to add 31,30,28 for previous month.
+		if (lastMonthNumber == 2) {da = (da+28);}
+		else if  (lastMonthNumber == 4 || lastMonthNumber == 6 || lastMonthNumber == 9 || lastMonthNumber == 11  ) {da = (da+30);}
+		else { da = (da+31);}
+    }
+    if (d < birthDate.getUTCDate()) { m--;}
+    document.getElementById("angela_disp").innerHTML = 'Angela is ' + age + ' years ' + m + ' months ' + da + ' days old';
+    var allA = 'A:'+age+'y'+m+'m';
+    
+
+    birthDate = new Date(dateStringC);
+    age = today.getFullYear() - birthDate.getFullYear();
+    m = today.getMonth() - birthDate.getMonth();
+	da = today.getDate() - birthDate.getDate();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+        m = (m+12);
+    }
+	if (da < 0 || (da === 0 && today.getDate() < birthDate.getDate())) {
+        //insert function here to add 31,30,28 for previous month.
+		if (lastMonthNumber == 2) {da = (da+28);}
+		else if  (lastMonthNumber == 4 || lastMonthNumber == 6 || lastMonthNumber == 9 || lastMonthNumber == 11  ) {da = (da+30);}
+		else { da = (da+31);}
+    }
+    if (d < birthDate.getUTCDate()) { m--;}
+    document.getElementById("clara_disp").innerHTML = 'Clara is ' + age + ' years ' + m + ' months ' + da + ' days old';
+    var allC = 'C:'+age+'y'+m+'m';
+    //var allC = 'C:'+m+'m'+da+'d';
+    
+    document.getElementById("all_disp").innerHTML =  '(xxx - ' + allJ + ', ' + allA + ', ' + allC + ')';
+    
+var weekday = new Array(7);
+weekday[0] =  "Sunday";
+weekday[1] = "Monday";
+weekday[2] = "Tuesday";
+weekday[3] = "Wednesday";
+weekday[4] = "Thursday";
+weekday[5] = "Friday";
+weekday[6] = "Saturday";
+    
+    var dirMonth = today2.getMonth() +1;
+    var dirDay = today.getDate();
+    var dirYear = today.getFullYear();
+    var dirDate = weekday[today.getDay()];
+    
+    document.getElementById("date_disp").innerHTML = dirMonth + '/' + dirDay + '/' + dirYear + ' ' + dirDate;
+	document.getElementById("foo").value = dirMonth + '/' + dirDay + '/' + dirYear + ' ' + dirDate + ' (xxx - ' + allJ + ', ' + allA + ', ' + allC + ')';
+}
+
+
+
+</script>
+
+2021/05/26
+</body>
+</html>
+
