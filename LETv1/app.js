@@ -258,11 +258,11 @@ function loadReviewQuestions(meetingKey) {
     questionItem.innerHTML = `
       <h4>Question ${index + 1}</h4>
       <p>${question}</p>
-      <div class="question-checkbox">
+      <!--div class="question-checkbox">
         <input type="checkbox" id="q${meetingKey}_${index}" data-meeting="${meetingKey}" data-question="${index}">
         <label for="q${meetingKey}_${index}">I have reflected on this question</label>
       </div>
-      <textarea class="form-control question-notes" placeholder="Your personal notes..." rows="2" data-meeting="${meetingKey}" data-question="${index}"></textarea>
+      <textarea class="form-control question-notes" placeholder="Your personal notes..." rows="2" data-meeting="${meetingKey}" data-question="${index}"></textarea-->
     `;
     
     reviewQuestions.appendChild(questionItem);
