@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluval 407 Price Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Fluval 407 Performance Canister Filter</h1>
+            <p class="subtitle">Price Tracker & Monitor</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Price Input Section -->
+            <section class="price-input-section card">
+                <div class="card__body">
+                    <h2>Update Current Price</h2>
+                    <div class="form-group">
+                        <label for="price-input" class="form-label">Enter Current Amazon Price</label>
+                        <div class="price-input-wrapper">
+                            <span class="price-prefix">$</span>
+                            <input type="number" id="price-input" class="form-control price-input" 
+                                   placeholder="229.99" min="0" max="999.99" step="0.01">
+                            <button type="button" id="update-price-btn" class="btn btn--primary">Update Price</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Price Display Section -->
+            <section class="price-display-section">
+                <div class="price-card" id="price-card">
+                    <div class="current-price-wrapper">
+                        <h3>Current Price</h3>
+                        <div class="current-price" id="current-price">$229.99</div>
+                    </div>
+                    <div class="price-analysis">
+                        <div class="msrp-info">
+                            <span class="label">MSRP:</span>
+                            <span class="value">$229.99</span>
+                        </div>
+                        <div class="price-difference" id="price-difference">
+                            <span class="label">Difference:</span>
+                            <span class="value" id="difference-value">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Amazon Link Section -->
+            <section class="amazon-link-section">
+                <a href="https://www.amazon.com/gp/product/B07JFY2QW6/ref=ewc_pr_img_1?smid=ATVPDKIKX0DER&th=1" 
+                   target="_blank" class="btn btn--primary btn--lg amazon-link">
+                    🛒 View on Amazon
+                </a>
+            </section>
+
+            <!-- Product Information -->
+            <section class="product-info card">
+                <div class="card__body">
+                    <h2>Product Details</h2>
+                    <p class="product-description">Aquarium canister filter for tanks up to 100 gallons</p>
+                    
+                    <div class="info-grid">
+                        <div class="specifications">
+                            <h3>Specifications</h3>
+                            <ul>
+                                <li>Aquarium Capacity: 50-100 US Gal (150-500 L)</li>
+                                <li>Pump Output: 383 US GPH (1450 LPH)</li>
+                                <li>Filter Circulation: 245 US GPH (930 LPH)</li>
+                                <li>Power Consumption: 23W (120V/60Hz)</li>
+                                <li>Dimensions: 9.5" L x 7" W x 19.3" H</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="features">
+                            <h3>Key Features</h3>
+                            <ul>
+                                <li>25% quieter operation than previous generation</li>
+                                <li>Energy-efficient eTEC technology</li>
+                                <li>EZ-Lift media baskets for easy maintenance</li>
+                                <li>Redesigned AquaStop valves</li>
+                                <li>All necessary filtration media included</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Price History -->
+            <section class="price-history card">
+                <div class="card__body">
+                    <h2>Price History</h2>
+                    <div class="history-grid">
+                        <div class="history-item">
+                            <span class="history-label">Lowest Ever:</span>
+                            <span class="history-value price-good">$189.99</span>
+                        </div>
+                        <div class="history-item">
+                            <span class="history-label">Highest Ever:</span>
+                            <span class="history-value price-bad">$283.59</span>
+                        </div>
+                        <div class="history-item">
+                            <span class="history-label">Average Price:</span>
+                            <span class="history-value">$228.70</span>
+                        </div>
+                        <div class="history-item">
+                            <span class="history-label">Last Updated:</span>
+                            <span class="history-value">May 27, 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
