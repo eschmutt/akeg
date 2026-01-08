@@ -416,8 +416,14 @@
         const errorDiv = document.getElementById('error');
 
         // Set today's date and current time by default
-        const today = new Date().toISOString().split('T')[0];
-        dateInput.value = today;
+        setTimeout(() => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const today = `${year}-${month}-${day}`;
+            dateInput.value = today;
+        }, 0);
         
         // Set current time
         const now = new Date();
