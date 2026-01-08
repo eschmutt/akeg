@@ -83,9 +83,31 @@
             transition: border-color 150ms ease, box-shadow 150ms ease;
         }
 
+        /* Compact numeric input for quantity */
+        input[type="number"],
+        #quantity {
+            width: auto;
+            max-width: 50px; /* small compact box */
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            font-family: var(--font-family);
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
+
         input[type="date"]:focus,
         input[type="time"]:focus,
         select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-focus-ring);
+        }
+
+        input[type="number"]:focus,
+        #quantity:focus {
             outline: none;
             border-color: var(--color-primary);
             box-shadow: 0 0 0 3px var(--color-focus-ring);
