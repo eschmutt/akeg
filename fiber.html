@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angela Daily Fiber</title>
+    <style>
+        :root {
+            --color-primary: #32b8c6;
+            --color-primary-hover: #1d7480;
+            --color-bg-primary: #fcfcf9;
+            --color-surface: #ffffff;
+            --color-text: #134252;
+            --color-text-secondary: #626c71;
+            --color-border: rgba(94, 82, 64, 0.2);
+            --color-success: #208d8d;
+            --color-focus-ring: rgba(51, 184, 198, 0.4);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 20px;
+            background-color: var(--color-bg-primary);
+            color: var(--color-text);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0 0 8px 0;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: var(--color-surface);
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--color-text);
+        }
+
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 14px;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            font-family: var(--font-family);
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+        }
+
+        input[type="date"]:focus,
+        input[type="time"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--color-focus-ring);
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .quantity-group {
+            display: grid;
+            grid-template-columns: 1fr 150px;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .info-section {
+            background-color: #32b8c60d;
+            border-left: 3px solid var(--color-primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .info-section.active {
+            display: block;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            border-top: 1px solid rgba(51, 184, 198, 0.2);
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+
+        .info-label {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .total-fiber {
+            font-size: 16px;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 150ms ease;
+            font-family: var(--font-family);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .btn-primary:active {
+            opacity: 0.9;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: #e8e8e6;
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dcdcda;
+        }
+
+        .confirmation {
+            background-color: #e8f5e9;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+            color: #1b5e20;
+        }
+
+        .confirmation.show {
+            display: block;
+            animation: slideIn 300ms ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .confirmation-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .confirmation-text {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error {
+            background-color: #ffebee;
+            border: 1px solid #c62828;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            display: none;
+            color: #b71c1c;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .error-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 600ms linear infinite;
+            margin-right: 6px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Angela Daily Fiber</h1>
+        <p class="subtitle">Track your daily fiber intake</p>
+
+        <div class="card">
+            <form id="fiberForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time</label>
+                        <input type="time" id="time" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="">Select a category...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="food">Food Item</label>
+                    <select id="food" required disabled>
+                        <option value="">Select a food item...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <div class="quantity-group">
+                        <input type="number" id="quantity" min="0.25" step="0.25" placeholder="0" required disabled>
+                        <div id="unitDisplay" style="padding: 10px 12px; text-align: center; color: var(--color-text-secondary); font-size: 14px; background: #f5f5f5; border-radius: 8px;">-</div>
+                    </div>
+                </div>
+
+                <div class="info-section" id="infoSection">
+                    <div class="info-row">
+                        <span class="info-label">Base Fiber per Serving:</span>
+                        <span class="info-value" id="baseFiber">0g</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Quantity:</span>
+                        <span class="info-value" id="displayQuantity">0</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Fiber:</span>
+                        <span class="info-value total-fiber" id="totalFiber">0g</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary" id="submitBtn">Submit Fiber</button>
+                </div>
+
+                <div class="confirmation" id="confirmation"></div>
+                <div class="error" id="error"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const foodDatabase = [
+            { category: 'FRUITS (Raw)', food: 'Apple (with peel)', unit: '1 medium', fiber: 3.3 },
+            { category: 'FRUITS (Raw)', food: 'Apricot', unit: '1 cup', fiber: 3.1 },
+            { category: 'FRUITS (Raw)', food: 'Banana', unit: '1 medium', fiber: 3.1 },
+            { category: 'FRUITS (Raw)', food: 'Blackberries', unit: '1 cup', fiber: 7.4 },
+            { category: 'FRUITS (Raw)', food: 'Blueberries', unit: '1 cup', fiber: 3.5 },
+            { category: 'FRUITS (Raw)', food: 'Cantaloupe', unit: '1 cup', fiber: 1.4 },
+            { category: 'FRUITS (Raw)', food: 'Grapefruit', unit: '1 medium', fiber: 2.8 },
+            { category: 'FRUITS (Raw)', food: 'Grapes', unit: '1 cup', fiber: 1.3 },
+            { category: 'FRUITS (Raw)', food: 'Orange', unit: '1 medium', fiber: 3.4 },
+            { category: 'FRUITS (Raw)', food: 'Pear (with peel)', unit: '1 medium', fiber: 4.0 },
+            { category: 'FRUITS (Raw)', food: 'Pineapple', unit: '1 cup', fiber: 2.0 },
+            { category: 'FRUITS (Raw)', food: 'Plum', unit: '1 medium', fiber: 1.0 },
+            { category: 'FRUITS (Raw)', food: 'Prunes (dried)', unit: '1/2 cup', fiber: 6.1 },
+            { category: 'FRUITS (Raw)', food: 'Raspberries', unit: '1 cup', fiber: 8.0 },
+            { category: 'FRUITS (Raw)', food: 'Strawberries', unit: '1 cup', fiber: 3.0 },
+            { category: 'FRUITS (Raw)', food: 'Watermelon', unit: '1 slice', fiber: 1.1 },
+            { category: 'GRAIN PRODUCTS', food: 'French bread', unit: '1 slice', fiber: 1.0 },
+            { category: 'GRAIN PRODUCTS', food: 'Rye bread', unit: '1 slice', fiber: 1.9 },
+            { category: 'GRAIN PRODUCTS', food: 'White bread', unit: '1 slice', fiber: 0.7 },
+            { category: 'GRAIN PRODUCTS', food: 'Whole-wheat bread', unit: '1 slice', fiber: 1.9 },
+            { category: 'GRAIN PRODUCTS', food: 'Wheat-bran cereal (dry)', unit: '1 ounce', fiber: 5.0 },
+            { category: 'GRAIN PRODUCTS', food: 'Cornflakes', unit: '1 ounce', fiber: 0.7 },
+            { category: 'GRAIN PRODUCTS', food: 'Oat bran (dry)', unit: '1 ounce', fiber: 4.1 },
+            { category: 'GRAIN PRODUCTS', food: 'Oatmeal', unit: '1 ounce', fiber: 3.3 },
+            { category: 'GRAIN PRODUCTS', food: 'Shredded wheat', unit: '1 ounce', fiber: 2.7 },
+            { category: 'GRAIN PRODUCTS', food: 'Brown rice (cooked)', unit: '1/2 cup', fiber: 1.8 },
+            { category: 'GRAIN PRODUCTS', food: 'White rice (cooked)', unit: '1/2 cup', fiber: 0.3 },
+            { category: 'GRAIN PRODUCTS', food: 'Spaghetti', unit: '2 ounces', fiber: 1.0 },
+            { category: 'GRAIN PRODUCTS', food: 'Peanuts (dry roasted)', unit: '1/2 cup', fiber: 5.8 },
+            { category: 'VEGETABLES', food: 'Artichoke', unit: '1 globe', fiber: 6.5 },
+            { category: 'VEGETABLES', food: 'Asparagus', unit: '1/2 cup', fiber: 1.8 },
+            { category: 'VEGETABLES', food: 'Green beans (canned)', unit: '1/2 cup', fiber: 1.0 },
+            { category: 'VEGETABLES', food: 'Kidney beans', unit: '1/2 cup', fiber: 5.7 },
+            { category: 'VEGETABLES', food: 'Pinto beans', unit: '1/2 cup', fiber: 7.7 },
+            { category: 'VEGETABLES', food: 'Broccoli', unit: '1/2 cup', fiber: 2.6 },
+            { category: 'VEGETABLES', food: 'Cabbage, green (cooked)', unit: '1/2 cup', fiber: 1.4 },
+            { category: 'VEGETABLES', food: 'Carrots', unit: '1/2 cup', fiber: 2.4 },
+            { category: 'VEGETABLES', food: 'Cauliflower (cooked)', unit: '1/2 cup', fiber: 1.7 },
+            { category: 'VEGETABLES', food: 'Celery (raw)', unit: '1/2 cup', fiber: 0.9 },
+            { category: 'VEGETABLES', food: 'Corn', unit: '1/2 cup', fiber: 2.0 },
+            { category: 'VEGETABLES', food: 'Eggplant', unit: '1/2 cup', fiber: 1.2 },
+            { category: 'VEGETABLES', food: 'Green peas', unit: '1/2 cup', fiber: 4.4 },
+            { category: 'VEGETABLES', food: 'Potato (baked with skin)', unit: '1/2 cup', fiber: 1.6 },
+            { category: 'VEGETABLES', food: 'Spinach', unit: '1/2 cup', fiber: 3.5 },
+            { category: 'VEGETABLES', food: 'Tomato', unit: '1/2 cup', fiber: 1.0 },
+            { category: 'VEGETABLES', food: 'Zucchini', unit: '1/2 cup', fiber: 1.3 }
+        ];
+
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbww94SPaH5fWrMxzDLKopzsBEUoMp1lYNhGc-8kwqHQGjoUi_-2lM4krdV4VhKzhdva/exec';
+
+        // Elements
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+        const categorySelect = document.getElementById('category');
+        const foodSelect = document.getElementById('food');
+        const quantityInput = document.getElementById('quantity');
+        const unitDisplay = document.getElementById('unitDisplay');
+        const baseFiberDisplay = document.getElementById('baseFiber');
+        const displayQuantityDisplay = document.getElementById('displayQuantity');
+        const totalFiberDisplay = document.getElementById('totalFiber');
+        const infoSection = document.getElementById('infoSection');
+        const form = document.getElementById('fiberForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const confirmation = document.getElementById('confirmation');
+        const errorDiv = document.getElementById('error');
+
+        // Set today's date and current time by default
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.value = today;
+        
+        // Set current time
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        timeInput.value = `${hours}:${minutes}`;
+
+        // Populate categories
+        function populateCategories() {
+            const categories = [...new Set(foodDatabase.map(item => item.category))];
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        // Update food items based on category
+        categorySelect.addEventListener('change', function() {
+            foodSelect.innerHTML = '<option value="">Select a food item...</option>';
+            quantityInput.value = '';
+            quantityInput.disabled = true;
+            unitDisplay.textContent = '-';
+            infoSection.classList.remove('active');
+
+            if (this.value) {
+                const foods = foodDatabase.filter(item => item.category === this.value);
+                foods.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.food;
+                    option.dataset.unit = item.unit;
+                    option.dataset.fiber = item.fiber;
+                    option.textContent = item.food;
+                    foodSelect.appendChild(option);
+                });
+                foodSelect.disabled = false;
+            } else {
+                foodSelect.disabled = true;
+            }
+        });
+
+        // Update unit and enable quantity input
+        foodSelect.addEventListener('change', function() {
+            quantityInput.value = '';
+            infoSection.classList.remove('active');
+
+            if (this.value) {
+                const selectedOption = this.options[this.selectedIndex];
+                const unit = selectedOption.dataset.unit;
+                const fiber = selectedOption.dataset.fiber;
+
+                unitDisplay.textContent = unit;
+                baseFiberDisplay.textContent = fiber + 'g';
+                quantityInput.disabled = false;
+                quantityInput.focus();
+            } else {
+                unitDisplay.textContent = '-';
+                quantityInput.disabled = true;
+            }
+        });
+
+        // Calculate total fiber on quantity change
+        quantityInput.addEventListener('input', function() {
+            if (foodSelect.value && this.value) {
+                const selectedOption = foodSelect.options[foodSelect.selectedIndex];
+                const baseFiber = parseFloat(selectedOption.dataset.fiber);
+                const quantity = parseFloat(this.value) || 0;
+                const totalFiber = (baseFiber * quantity).toFixed(2);
+
+                displayQuantityDisplay.textContent = quantity + ' ' + selectedOption.dataset.unit;
+                totalFiberDisplay.textContent = totalFiber + 'g';
+                infoSection.classList.add('active');
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const date = dateInput.value;
+            const time = timeInput.value;
+            const category = categorySelect.value;
+            const food = foodSelect.value;
+            const quantity = quantityInput.value;
+            const selectedOption = foodSelect.options[foodSelect.selectedIndex];
+            const unit = selectedOption.dataset.unit;
+            const baseFiber = parseFloat(selectedOption.dataset.fiber);
+            const totalFiber = (baseFiber * parseFloat(quantity)).toFixed(2);
+
+            const payload = {
+                date: date,
+                time: time,
+                category: category,
+                food: food,
+                quantity: String(quantity),
+                unit: unit,
+                fiber: String(totalFiber)
+            };
+
+            // Disable submit button and show loading
+            submitBtn.disabled = true;
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<span class="loading"></span>Submitting...';
+
+            try {
+                const response = await fetch(SHEET_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.text();
+
+                if (result === 'OK') {
+                    // Show confirmation
+                    confirmation.classList.remove('show');
+                    confirmation.innerHTML = `
+                        <div class="confirmation-title">✓ Fiber Entry Added</div>
+                        <div class="confirmation-text">
+                            <strong>${food}</strong> (${quantity} ${unit})<br>
+                            Fiber: <strong>${totalFiber}g</strong><br>
+                            Date: ${new Date(date).toLocaleDateString()} at ${time}
+                        </div>
+                    `;
+                    confirmation.classList.add('show');
+
+                    // Reset form
+                    form.reset();
+                    dateInput.value = today;
+                    foodSelect.innerHTML = '<option value="">Select a food item...</option>';
+                    foodSelect.disabled = true;
+                    quantityInput.disabled = true;
+                    quantityInput.value = '';
+                    unitDisplay.textContent = '-';
+                    infoSection.classList.remove('active');
+                    errorDiv.classList.remove('show');
+                } else {
+                    throw new Error('Unexpected response from server');
+                }
+            } catch (err) {
+                errorDiv.classList.remove('show');
+                errorDiv.innerHTML = `
+                    <div class="error-title">Error Submitting Entry</div>
+                    <div>${err.message}</div>
+                `;
+                errorDiv.classList.add('show');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
+        });
+
+        // Initialize
+        populateCategories();
+    </script>
+</body>
+</html>
