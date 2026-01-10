@@ -457,21 +457,20 @@
         const confirmation = document.getElementById('confirmation');
         const errorDiv = document.getElementById('error');
 
-        // Set today's date and current time by default
-        setTimeout(() => {
+        // Set today's date and current time by default (synchronously)
+        let today;
+        (function initDateTime() {
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
-            const today = `${year}-${month}-${day}`;
+            today = `${year}-${month}-${day}`;
             dateInput.value = today;
-        }, 0);
-        
-        // Set current time
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        timeInput.value = `${hours}:${minutes}`;
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            timeInput.value = `${hours}:${minutes}`;
+        })();
 
         // Populate categories
         function populateCategories() {
@@ -595,6 +594,11 @@
                     // Reset form
                     form.reset();
                     dateInput.value = today;
+                    // Reset time to current time
+                    const _now = new Date();
+                    const _hours = String(_now.getHours()).padStart(2, '0');
+                    const _minutes = String(_now.getMinutes()).padStart(2, '0');
+                    timeInput.value = `${_hours}:${_minutes}`;
                     foodSelect.innerHTML = '<option value="">Select a food item...</option>';
                     foodSelect.disabled = true;
                     quantityInput.disabled = true;
