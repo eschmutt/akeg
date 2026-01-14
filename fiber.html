@@ -376,6 +376,14 @@
                 </div>
 
                 <div class="button-group">
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" rows="3" placeholder="Optional notes about this entry (e.g., meal context)"></textarea>
+                </div>
+
+                <div class="button-group">
                     <button type="submit" class="btn-primary" id="submitBtn">Submit Fiber</button>
                 </div>
 
@@ -460,7 +468,9 @@
         ];
 
         //const SHEET_URL = 'https://script.google.com/macros/s/AKfycbww94SPaH5fWrMxzDLKopzsBEUoMp1lYNhGc-8kwqHQGjoUi_-2lM4krdV4VhKzhdva/exec';
-        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyzg3t6qRH1-spQNvS6VOYND3TVfy-7fO6cWDgtb46oOCVKzTn_OGQhTmCXvxuBAcq9/exec';
+        //const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyzg3t6qRH1-spQNvS6VOYND3TVfy-7fO6cWDgtb46oOCVKzTn_OGQhTmCXvxuBAcq9/exec';
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbw8fQHAWpnNGXAOo2W7QotUiqc_R7j7FgQPXMn4ehgwGUwTMmrgY9VBojoTvSixIX5A/exec';
+        
 
 
         // Elements
@@ -473,6 +483,7 @@
         const baseFiberDisplay = document.getElementById('baseFiber');
         const displayQuantityDisplay = document.getElementById('displayQuantity');
         const totalFiberDisplay = document.getElementById('totalFiber');
+    const notesInput = document.getElementById('notes');
         const infoSection = document.getElementById('infoSection');
         const form = document.getElementById('fiberForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -495,6 +506,17 @@
         })();
 
         // Populate categories
+        // Simple HTML-escape for user-provided text shown in confirmation
+        function escapeHtml(str) {
+            if (!str && str !== '') return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function populateCategories() {
             const categories = [...new Set(foodDatabase.map(item => item.category))];
             categories.forEach(cat => {
@@ -584,7 +606,8 @@
                 food: food,
                 quantity: String(quantity),
                 unit: unit,
-                fiber: String(totalFiber)
+                fiber: String(totalFiber),
+                note: notesInput ? String(notesInput.value || '') : ''
             };
 
             // Disable submit button and show loading
@@ -609,6 +632,7 @@
                             <strong>${food}</strong> (${quantity} ${unit})<br>
                             Fiber: <strong>${totalFiber}g</strong><br>
                             Date: ${new Date(date).toLocaleDateString()} at ${time}
+                            ${notesInput && notesInput.value ? `<div style="margin-top:8px; font-size:13px; color: #37474f;">Note: ${escapeHtml(notesInput.value)}</div>` : ''}
                         </div>
                     `;
                     confirmation.classList.add('show');
