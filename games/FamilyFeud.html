@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Homeschool Family Feud - Host Console</title>
+
+<style>
+:root{
+  --navy:#061641;
+  --blue:#0b3c91;
+  --blue2:#176dca;
+  --gold:#ffc928;
+  --cream:#fff8dc;
+  --green:#2fbd69;
+  --red:#e33b3b;
+  --white:#fff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  color:white;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,201,40,.14),transparent 25%),
+    radial-gradient(circle at 80% 25%,rgba(35,125,230,.25),transparent 30%),
+    linear-gradient(145deg,#020a22,#08245f 55%,#041333);
+}
+
+button,input{font:inherit}
+
+button{
+  cursor:pointer;
+  border:0;
+  border-radius:10px;
+  padding:11px 15px;
+  font-weight:900;
+  color:white;
+  background:linear-gradient(#237bd1,#0b3d90);
+  box-shadow:0 4px 0 #031337;
+}
+
+button:hover{filter:brightness(1.12)}
+button:active{transform:translateY(2px);box-shadow:0 2px 0 #031337}
+
+button.gold{
+  background:linear-gradient(#ffe56f,#efaa1f);
+  color:#061641;
+  box-shadow:0 4px 0 #8a5400;
+}
+
+button.red{
+  background:linear-gradient(#fa6060,#b91212);
+  box-shadow:0 4px 0 #670000;
+}
+
+button.green{
+  background:linear-gradient(#4bd787,#198d52);
+  box-shadow:0 4px 0 #07542f;
+}
+
+.app{
+  width:min(1180px,96%);
+  margin:auto;
+  padding:16px 0 35px;
+}
+
+.header{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:15px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.team{
+  text-align:center;
+  border:3px solid var(--gold);
+  border-radius:16px;
+  padding:10px;
+  background:linear-gradient(#123d91,#061641);
+  box-shadow:0 8px 22px rgba(0,0,0,.28);
+}
+
+.team-name{
+  font-size:clamp(13px,2vw,20px);
+  font-weight:900;
+}
+
+.team-score{
+  display:block;
+  margin-top:4px;
+  color:var(--gold);
+  font-size:clamp(34px,5vw,58px);
+  font-weight:900;
+}
+
+.logo{
+  border:5px solid var(--gold);
+  border-radius:50%;
+  padding:14px 27px;
+  text-align:center;
+  background:linear-gradient(#1872c6,#08296e);
+  box-shadow:0 0 0 4px white,0 0 22px rgba(255,201,40,.55);
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.logo small{
+  display:block;
+  color:var(--gold);
+  letter-spacing:2px;
+}
+
+.logo strong{
+  display:block;
+  font-size:clamp(22px,4vw,38px);
+}
+
+.host-tag{
+  text-align:center;
+  color:#b9d5ff;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:12px;
+  font-weight:900;
+  margin:7px 0;
+}
+
+.round-label{
+  color:var(--gold);
+  text-align:center;
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:13px;
+  font-weight:900;
+}
+
+.question{
+  margin:7px 0 17px;
+  padding:17px 22px;
+  border:5px solid var(--gold);
+  border-radius:17px;
+  background:linear-gradient(#fffef4,#f7e5a4);
+  color:#061641;
+  text-align:center;
+  font-size:clamp(19px,3vw,29px);
+  font-weight:900;
+  box-shadow:0 9px 21px rgba(0,0,0,.27);
+}
+
+.board{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  padding:17px;
+  border:6px solid var(--gold);
+  border-radius:20px;
+  background:#041337;
+  box-shadow:inset 0 0 25px #000,0 10px 25px rgba(0,0,0,.3);
+}
+
+.answer{
+  position:relative;
+  min-height:82px;
+  display:grid;
+  grid-template-columns:50px 1fr 80px;
+  align-items:center;
+  overflow:hidden;
+  border:3px solid white;
+  border-radius:11px;
+  background:linear-gradient(#2479c9,#0a367f);
+  transition:.15s;
+  cursor:pointer;
+}
+
+.answer:hover{
+  transform:scale(1.012);
+  filter:brightness(1.12);
+}
+
+.number{
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:#061641;
+  color:var(--gold);
+  font-size:25px;
+  font-weight:900;
+}
+
+.answer-text{
+  padding:10px 14px;
+  font-size:clamp(15px,2.2vw,22px);
+  font-weight:900;
+}
+
+.point-box{
+  position:relative;
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(#ffe071,#efad24);
+  color:#061641;
+  font-size:28px;
+  font-weight:900;
+}
+
+.answer.awarded{
+  opacity:.83;
+  cursor:default;
+}
+
+.answer.awarded:hover{
+  transform:none;
+  filter:none;
+}
+
+.answer.awarded .point-box::after{
+  content:"✓";
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#087c3d;
+  background:rgba(255,255,255,.72);
+  font-size:58px;
+  font-weight:900;
+  text-shadow:0 2px white;
+}
+
+.answer.awarded .point-box{
+  color:#061641;
+}
+
+/* point value remains faintly visible behind check */
+.answer.awarded .point-value{
+  opacity:.30;
+}
+
+.status-row{
+  margin-top:15px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:12px;
+  align-items:center;
+}
+
+.strike-panel,
+.round-total{
+  border:3px solid var(--gold);
+  border-radius:13px;
+  padding:10px;
+  text-align:center;
+  background:rgba(4,19,55,.94);
+}
+
+.status-label{
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.strikes{
+  min-height:43px;
+  color:#ff4545;
+  font-size:39px;
+  line-height:43px;
+  font-weight:900;
+  letter-spacing:10px;
+  text-shadow:1px 1px white;
+}
+
+.round-points{
+  color:var(--gold);
+  font-size:37px;
+  font-weight:900;
+}
+
+.controls{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:17px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  place-items:center;
+  padding:18px;
+  background:rgba(0,5,25,.89);
+}
+
+.modal.show{display:grid}
+
+.modal-card{
+  width:min(580px,100%);
+  padding:25px;
+  border:6px solid var(--gold);
+  border-radius:21px;
+  background:var(--cream);
+  color:#061641;
+  text-align:center;
+  box-shadow:0 0 35px rgba(255,201,40,.4);
+}
+
+.modal-card h1,
+.modal-card h2{
+  margin-top:0;
+  color:#0b3c91;
+}
+
+.big-logo{
+  margin-bottom:7px;
+  font-size:42px;
+}
+
+.setup-input{
+  width:100%;
+  margin:6px 0 14px;
+  padding:13px;
+  border:3px solid #0b3c91;
+  border-radius:9px;
+  background:white;
+  color:#061641;
+  text-align:center;
+  font-size:20px;
+  font-weight:800;
+}
+
+.setup-label{
+  display:block;
+  text-align:left;
+  color:#0b3c91;
+  font-weight:900;
+}
+
+.team-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:17px;
+}
+
+.team-choice button{
+  min-height:80px;
+  font-size:19px;
+}
+
+.selected-answer{
+  margin:13px 0;
+  padding:15px;
+  border-radius:10px;
+  background:#e9f2ff;
+  font-size:19px;
+  font-weight:900;
+}
+
+.selected-points{
+  color:#16884d;
+  font-size:42px;
+  font-weight:900;
+}
+
+.cancel{
+  margin-top:15px;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  top:20px;
+  z-index:200;
+  transform:translateX(-50%);
+  padding:13px 22px;
+  border:4px solid var(--gold);
+  border-radius:12px;
+  background:white;
+  color:#061641;
+  font-weight:900;
+  box-shadow:0 8px 28px rgba(0,0,0,.4);
+}
+
+@media(max-width:700px){
+  .header{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .logo{
+    grid-column:1/-1;
+    grid-row:1;
+  }
+
+  .board{grid-template-columns:1fr}
+
+  .status-row{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+<div class="modal show" id="setupModal">
+  <div class="modal-card">
+    <div class="big-logo">🏆</div>
+    <h1>Homeschool Family Feud</h1>
+    <p><strong>Host Setup</strong></p>
+
+    <label class="setup-label">Team 1 Name</label>
+    <input id="setupTeam1" class="setup-input" value="Team Scholars">
+
+    <label class="setup-label">Team 2 Name</label>
+    <input id="setupTeam2" class="setup-input" value="Team Explorers">
+
+    <button class="gold" style="width:100%;font-size:18px" onclick="startGame()">
+      Start the Feud!
+    </button>
+
+    <p style="font-size:12px;color:#52627c;margin-bottom:0">
+      This is the host screen. All answers will be visible to you.
+    </p>
+  </div>
+</div>
+
+<!-- AWARD POINTS POPUP -->
+<div class="modal" id="awardModal">
+  <div class="modal-card">
+    <h2>Who gets the points?</h2>
+
+    <div class="selected-answer" id="selectedAnswer"></div>
+    <div class="selected-points" id="selectedPoints"></div>
+
+    <div class="team-choice">
+      <button class="green" id="awardTeam1" onclick="awardSelected(0)"></button>
+      <button class="green" id="awardTeam2" onclick="awardSelected(1)"></button>
+    </div>
+
+    <button class="red cancel" onclick="closeAward()">Cancel</button>
+  </div>
+</div>
+
+<main class="app">
+
+  <div class="host-tag">Host Console - Keep this screen facing the host</div>
+
+  <header class="header">
+
+    <section class="team">
+      <div class="team-name" id="team1Name">Team Scholars</div>
+      <span class="team-score" id="team1Score">0</span>
+    </section>
+
+    <div class="logo">
+      <small>Homeschool</small>
+      <strong>Family Feud</strong>
+    </div>
+
+    <section class="team">
+      <div class="team-name" id="team2Name">Team Explorers</div>
+      <span class="team-score" id="team2Score">0</span>
+    </section>
+
+  </header>
+
+  <div class="round-label" id="roundLabel"></div>
+  <div class="question" id="question"></div>
+
+  <section class="board" id="board"></section>
+
+  <section class="status-row">
+
+    <div class="strike-panel">
+      <div class="status-label">Wrong Answers</div>
+      <div class="strikes" id="strikes">-</div>
+      <button class="red" onclick="addStrike()">Add ❌</button>
+      <button onclick="clearStrikes()">Clear</button>
+    </div>
+
+    <button class="gold" onclick="resetRound()">Reset Round</button>
+
+    <div class="round-total">
+      <div class="status-label">Points Awarded This Round</div>
+      <div class="round-points" id="roundPoints">0</div>
+    </div>
+
+  </section>
+
+  <div class="controls">
+    <button onclick="previousRound()">◀ Previous Round</button>
+    <button class="gold" onclick="nextRound()">Next Round ▶</button>
+    <button onclick="changeTeams()">Change Team Names</button>
+    <button class="red" onclick="resetEntireGame()">Reset Entire Game</button>
+  </div>
+
+</main>
+
+<script>
+const rounds = [
+{
+question:"Name something a homeschool kid might do five minutes before school starts.",
+answers:[
+["Still be eating breakfast",30],
+["Look for a pencil",24],
+["Still be in pajamas",20],
+["Brush their teeth",14],
+["Find their schoolbooks",8],
+["Ask what they are doing today",4]
+]},
+{
+question:"Name something kids open the refrigerator hoping to find.",
+answers:[
+["Dessert",28],
+["Fruit",22],
+["Leftover pizza",18],
+["Cheese",14],
+["Juice",11],
+["Something they forgot was there",7]
+]},
+{
+question:"Name something your sibling does that drives you crazy.",
+answers:[
+["Takes my stuff",29],
+["Makes annoying noises",22],
+["Interrupts me",18],
+["Gets me in trouble",13],
+["Takes too long in the bathroom",10],
+["Copies me",8]
+]},
+{
+question:"Name something a dog probably wishes humans understood.",
+answers:[
+["I want more food",28],
+["Take me outside",22],
+["Throw the ball again",18],
+["Stop hugging me",13],
+["Someone is at the door",11],
+["I did not mean to make that mess",8]
+]},
+{
+question:"Name a superpower that would make homeschool easier.",
+answers:[
+["Know every answer",30],
+["Read super fast",22],
+["Stop time",17],
+["Never need sleep",13],
+["Write assignments instantly",11],
+["Teleport to field trips",7]
+]},
+{
+question:"Name something a parent says almost every day.",
+answers:[
+["Clean up your mess",25],
+["Did you finish your schoolwork?",23],
+["Stop bothering your sibling",18],
+["What is taking so long?",14],
+["Put that away",12],
+["Go outside",8]
+]},
+{
+question:"Name somewhere homeschool kids would be excited to have a field trip.",
+answers:[
+["Zoo",26],
+["Science museum",22],
+["Amusement park",18],
+["Farm",14],
+["Aquarium",12],
+["Historical site",8]
+]},
+{
+question:"Name something you do not want to hear a parent say during school.",
+answers:[
+["That is incorrect",25],
+["We are not finished yet",23],
+["Get your math book",19],
+["Put the tablet away",14],
+["You have extra work today",11],
+["Let us start that over",8]
+]},
+{
+question:"Name something you might find outside that you probably should not pick up.",
+answers:[
+["Animal poop",31],
+["Dead animal",21],
+["Bug or spider",18],
+["Mystery mushroom",13],
+["Garbage",10],
+["Mud",7]
+]},
+{
+question:"If kids could eliminate one chore forever, what would they choose?",
+answers:[
+["Cleaning their room",27],
+["Dishes",24],
+["Laundry",17],
+["Taking out the trash",13],
+["Cleaning the bathroom",11],
+["Yard work",8]
+]}
+];
+
+let teamNames=["Team Scholars","Team Explorers"];
+let teamScores=[0,0];
+let currentRound=0;
+let strikes=0;
+
+/*
+Store awarded answers separately for each round.
+
+Example:
+awarded[0][2] = 1
+means:
+Round 1, answer 3 was awarded to Team 2.
+*/
+let awarded=rounds.map(()=>({}));
+
+let pendingAnswer=null;
+
+function startGame(){
+
+  const t1=document.getElementById("setupTeam1").value.trim();
+  const t2=document.getElementById("setupTeam2").value.trim();
+
+  teamNames=[
+    t1 || "Team 1",
+    t2 || "Team 2"
+  ];
+
+  updateTeamDisplay();
+
+  document.getElementById("setupModal").classList.remove("show");
+
+  renderRound();
+}
+
+function updateTeamDisplay(){
+
+  document.getElementById("team1Name").textContent=teamNames[0];
+  document.getElementById("team2Name").textContent=teamNames[1];
+
+  document.getElementById("team1Score").textContent=teamScores[0];
+  document.getElementById("team2Score").textContent=teamScores[1];
+
+  document.getElementById("awardTeam1").textContent=teamNames[0];
+  document.getElementById("awardTeam2").textContent=teamNames[1];
+}
+
+function renderRound(){
+
+  const round=rounds[currentRound];
+
+  document.getElementById("roundLabel").textContent=
+    `Round ${currentRound+1} of ${rounds.length}`;
+
+  document.getElementById("question").textContent=round.question;
+
+  const board=document.getElementById("board");
+  board.innerHTML="";
+
+  round.answers.forEach((answer,index)=>{
+
+    const card=document.createElement("div");
+
+    const alreadyAwarded =
+      Object.prototype.hasOwnProperty.call(
+        awarded[currentRound],
+        index
+      );
+
+    card.className=
+      "answer" + (alreadyAwarded ? " awarded" : "");
+
+    card.innerHTML=`
+      <div class="number">${index+1}</div>
+
+      <div class="answer-text">
+        ${escapeHTML(answer[0])}
+      </div>
+
+      <div class="point-box">
+        <span class="point-value">${answer[1]}</span>
+      </div>
+    `;
+
+    if(!alreadyAwarded){
+      card.onclick=()=>selectAnswer(index);
+    }
+
+    board.appendChild(card);
+  });
+
+  updateRoundTotal();
+  updateStrikes();
+  updateTeamDisplay();
+}
+
+function selectAnswer(index){
+
+  if(
+    Object.prototype.hasOwnProperty.call(
+      awarded[currentRound],
+      index
+    )
+  ){
+    return;
+  }
+
+  pendingAnswer=index;
+
+  const answer=rounds[currentRound].answers[index];
+
+  document.getElementById("selectedAnswer").textContent=answer[0];
+
+  document.getElementById("selectedPoints").textContent=
+    `${answer[1]} points`;
+
+  document.getElementById("awardTeam1").textContent=teamNames[0];
+  document.getElementById("awardTeam2").textContent=teamNames[1];
+
+  document.getElementById("awardModal").classList.add("show");
+}
+
+function awardSelected(teamIndex){
+
+  if(pendingAnswer===null) return;
+
+  const answer=rounds[currentRound].answers[pendingAnswer];
+
+  if(
+    Object.prototype.hasOwnProperty.call(
+      awarded[currentRound],
+      pendingAnswer
+    )
+  ){
+    closeAward();
+    return;
+  }
+
+  const points=answer[1];
+
+  teamScores[teamIndex]+=points;
+
+  awarded[currentRound][pendingAnswer]=teamIndex;
+
+  showToast(
+    `${teamNames[teamIndex]} gets ${points} points!`
+  );
+
+  pendingAnswer=null;
+
+  closeAward();
+  renderRound();
+}
+
+function closeAward(){
+
+  document.getElementById("awardModal").classList.remove("show");
+  pendingAnswer=null;
+}
+
+function addStrike(){
+
+  if(strikes<3){
+    strikes++;
+  }
+
+  updateStrikes();
+}
+
+function clearStrikes(){
+
+  strikes=0;
+  updateStrikes();
+}
+
+function updateStrikes(){
+
+  document.getElementById("strikes").textContent=
+    strikes>0 ? "❌".repeat(strikes) : "-";
+}
+
+function updateRoundTotal(){
+
+  const used=awarded[currentRound];
+
+  let total=0;
+
+  Object.keys(used).forEach(index=>{
+    total+=rounds[currentRound].answers[index][1];
+  });
+
+  document.getElementById("roundPoints").textContent=total;
+}
+
+function nextRound(){
+
+  if(currentRound<rounds.length-1){
+
+    currentRound++;
+    strikes=0;
+    renderRound();
+
+  }else{
+
+    const winner=
+      teamScores[0]===teamScores[1]
+      ? "It's a tie!"
+      : `${teamNames[
+          teamScores[0]>teamScores[1] ? 0 : 1
+        ]} is winning!`;
+
+    showToast(winner);
+  }
+}
+
+function previousRound(){
+
+  if(currentRound>0){
+
+    currentRound--;
+    strikes=0;
+    renderRound();
+  }
+}
+
+function resetRound(){
+
+  if(!confirm("Undo all points awarded during this round?")){
+    return;
+  }
+
+  const currentAwards=awarded[currentRound];
+
+  Object.entries(currentAwards).forEach(([answerIndex,teamIndex])=>{
+
+    const points=
+      rounds[currentRound].answers[answerIndex][1];
+
+    teamScores[teamIndex]-=points;
+  });
+
+  awarded[currentRound]={};
+  strikes=0;
+
+  renderRound();
+}
+
+function resetEntireGame(){
+
+  if(!confirm("Reset all scores and every round?")){
+    return;
+  }
+
+  teamScores=[0,0];
+
+  awarded=rounds.map(()=>({}));
+
+  currentRound=0;
+  strikes=0;
+
+  renderRound();
+}
+
+function changeTeams(){
+
+  document.getElementById("setupTeam1").value=teamNames[0];
+  document.getElementById("setupTeam2").value=teamNames[1];
+
+  document.getElementById("setupModal").classList.add("show");
+}
+
+function showToast(message){
+
+  const toast=document.createElement("div");
+
+  toast.className="toast";
+  toast.textContent=message;
+
+  document.body.appendChild(toast);
+
+  setTimeout(()=>{
+    toast.remove();
+  },1800);
+}
+
+function escapeHTML(text){
+
+  return text.replace(/[&<>"']/g,char=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+/* clicking outside award popup does not accidentally award points */
+document.getElementById("awardModal").addEventListener("click",event=>{
+  if(event.target.id==="awardModal"){
+    closeAward();
+  }
+});
+
+renderRound();
+</script>
+
+</body>
+</html>
